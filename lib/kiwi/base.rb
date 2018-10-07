@@ -20,7 +20,5 @@ module Kiwi
         end
       end
     end
-
-    private_constant :Base
   end
 end

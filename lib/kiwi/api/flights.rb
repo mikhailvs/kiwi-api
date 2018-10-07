@@ -1,31 +1,21 @@
 module Kiwi
-  # rubocop:disable Metrics/ModuleLength
   module API
     # rubocop:disable Metrics/BlockLength
     FLIGHTS_PARAM_CONVERTER = ParameterConverter.new do
-      convert(:version) do |v|
-        { v: v }
-      end
-
-      convert(:currency) do |v|
-        { curr: v }
-      end
-
-      convert(:from) do |v|
-        { flyFrom: [*v].join(',') }
-      end
-
-      convert(:to) do |v|
-        { to: [*v].join(',') }
-      end
-
-      convert(:depart) do |v|
-        %I[dateFrom dateTo].zip(date_range(v)).to_h
-      end
-
-      convert(:return) do |v|
-        %I[returnFrom returnTo].zip(date_range(v)).to_h
-      end
+      convert(:version) { |v| { v: v } }
+      convert(:currency) { |v| { curr: v } }
+      convert(:from) { |v| { flyFrom: [*v].join(',') } }
+      convert(:to) { |v| { to: [*v].join(',') } }
+      convert(:depart) { |v| %I[dateFrom dateTo].zip(date_range(v)).to_h }
+      convert(:return) { |v| %I[returnFrom returnTo].zip(date_range(v)).to_h }
+      convert(:max_flight_time) { |v| { maxFlyDuration: v } }
+      convert(:unique_cities) { |v| { oneforcity: bool_to_int(v) } }
+      convert(:unique_dates) { |v| { one_per_date: bool_to_int(v) } }
+      convert(:passengers) { |v| v }
+      convert(:price) { |v| %I[priceFrom priceTo].zip(maybe_range(v)).to_h }
+      convert(:direct) { |v| { directFlights: bool_to_int(v) } }
+      convert(:max_stopovers) { |v| { maxstopovers: v } }
+      convert(:ascending) { |v| { asc: bool_to_int(v) } }
 
       convert(:depart_takeoff) do |v|
         %I[dtimefrom dtimeto].zip(maybe_range(v)).to_h
@@ -47,22 +37,6 @@ module Kiwi
         %I[daysInDestinationFrom daysInDestinationTo].zip(maybe_range(v)).to_h
       end
 
-      convert(:max_flight_time) do |v|
-        { maxFlyDuration: v }
-      end
-
-      convert(:unique_cities) do |v|
-        { oneforcity: bool_to_int(v) }
-      end
-
-      convert(:unique_dates) do |v|
-        { one_per_date: bool_to_int(v) }
-      end
-
-      convert(:passengers) do |v|
-        v
-      end
-
       convert(:depart_days) do |v|
         params = { flyDaysType: 'departure' }
 
@@ -81,20 +55,8 @@ module Kiwi
         params.merge(returnFlyDays: v.map(&day_number))
       end
 
-      convert(:price) do |v|
-        %I[priceFrom priceTo].zip(maybe_range(v)).to_h
-      end
-
-      convert(:direct) do |v|
-        { directFlights: bool_to_int(v) }
-      end
-
       convert(:stopover_length) do |v|
         %I[stopoverfrom stopoverto].zip(maybe_range(v)).to_h
-      end
-
-      convert(:max_stopovers) do |v|
-        { maxstopovers: v }
       end
 
       convert(:multi_airport) do |v|
@@ -136,32 +98,6 @@ module Kiwi
           selectedStopoverAirportsExclude: 1
         }
       end
-
-      convert(:ascending) do |v|
-        { asc: bool_to_int(v) }
-      end
-
-      def date_range(val)
-        from, to = maybe_range(val)
-
-        if from.is_a?(Date)
-          [from.strftime('%d/%m/%Y'), to.strftime('%d/%m/%Y')]
-        else
-          [from, to]
-        end
-      end
-
-      def maybe_range(val)
-        val.is_a?(Range) ? [val.first, val.last] : [val, val]
-      end
-
-      def bool_to_int(val)
-        val ? 1 : 0
-      end
-
-      def day_number(day_name)
-        %I[sun mon tue wed thu fri sat].index(day_name)
-      end
     end
     # rubocop:enable Metrics/BlockLength
 
@@ -193,5 +129,4 @@ module Kiwi
       end
     end
   end
-  # rubocop:enable Metrics/ModuleLength
 end

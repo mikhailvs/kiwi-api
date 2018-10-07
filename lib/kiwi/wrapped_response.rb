@@ -27,7 +27,5 @@ module Kiwi
         @obj
       end
     end
-
-    private_constant :WrappedResponse
   end
 end

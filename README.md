@@ -18,6 +18,7 @@ flights = Kiwi::API::Flights.new(
   locale: 'en-US'
 )
 
+
 results = flights.search(
   from: 'SEA',
   to: 'RU',
