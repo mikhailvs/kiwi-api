@@ -18,20 +18,28 @@ flights = Kiwi::API::Flights.new(
   locale: 'en-US'
 )
 
-
-results = flights.search(
-  from: 'SEA',
-  to: 'RU',
-  limit: 10,
-  depart: Date.parse('1 Nov 2018')..Date.parse('1 Feb 2019'),
-  return: Date.parse('1 Nov 2018')..Date.parse('1 Feb 2019'),
-  nights: 20
-)
-
-puts results.inspect
-
 locations = Kiwi::API::Locations.new
 
-puts locations.country('ireland').inspect
+dates = Date.parse('1 Jan 2019')..Date.parse('10 Sep 2019')
+
+result = flights.search(
+  from: locations.city('washington d.c.').first.code,
+  to: locations.country('france').first.code,
+  limit: 10,
+  depart: dates,
+  return: dates,
+  nights: 10..15
+).data.first
+
+info = {
+  to: result.cityTo,
+  from: result.cityFrom,
+  price: result.price,
+  distance: result.distance,
+  flight_time: result.fly_duration,
+  leave: Time.at(result.dTime)
+}
+
+puts info.inspect
 
 ```
