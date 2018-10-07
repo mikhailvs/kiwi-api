@@ -3,9 +3,9 @@ Ruby bindings for the Kiwi.com API.
 
 ## Install
 ```ruby
-git_source(:gitlab) { |repo_name| "https://gitlab.com/#{repo_name}" }
+git_source(:gitlab) { |repo_name| "https://gitlab.com/#{repo_name}.git" }
 
-gem 'kiwi-api', gitlab: 'mikhailvs/kiwi-api'
+gem 'kiwi-api', gitlab: 'mikhailvs/kiwi-ruby'
 ````
 
 ## Use
