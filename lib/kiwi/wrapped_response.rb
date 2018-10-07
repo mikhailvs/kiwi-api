@@ -19,7 +19,7 @@ module Kiwi
       end
       # rubocop:enable Style/MethodMissingSuper
 
-      def respond_to_missing?(method_name)
+      def respond_to_missing?(method_name, *_args, &_block)
         !@obj.dig(method_name.to_s).nil? || @obj.respond_to?(method_name)
       end
 
