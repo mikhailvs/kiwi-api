@@ -12,7 +12,7 @@ module Kiwi
       convert(:unique_cities) { |v| { oneforcity: bool_to_int(v) } }
       convert(:unique_dates) { |v| { one_per_date: bool_to_int(v) } }
       convert(:passengers) { |v| v }
-      convert(:price) { |v| %I[priceFrom priceTo].zip(maybe_range(v)).to_h }
+      convert(:price) { |v| %I[price_from price_to].zip(maybe_range(v)).to_h }
       convert(:direct) { |v| { directFlights: bool_to_int(v) } }
       convert(:max_stopovers) { |v| { maxstopovers: v } }
       convert(:ascending) { |v| { asc: bool_to_int(v) } }
