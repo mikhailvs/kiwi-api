@@ -17,13 +17,17 @@ module Kiwi
         country region continent
       ].each do |meth|
         define_method meth do |arg, **params|
-          response = @conn.get(
-            PATH,
-            @default_params.merge(**params, location_types: meth, term: arg)
-          )
-
-          wrap_response(response).locations
+          search(arg, params.merge(location_types: meth))
         end
+      end
+
+      def search(term, **params)
+        response = @conn.get(
+          PATH,
+          @default_params.merge(**params, term: term)
+        )
+
+        wrap_response(response).locations
       end
     end
   end
