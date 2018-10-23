@@ -6,14 +6,14 @@ module Kiwi
       end
 
       # rubocop:disable Style/MethodMissingSuper
-      def method_missing(method_name, *args, &block)
-        val = @obj.dig(method_name.to_s)
+      def method_missing(meh, *arr, &blk)
+        val = @obj.dig(meh.to_s)
 
         return val.map(&self.class.method(:new)) if val.is_a?(Array)
 
         return self.class.new(val) if val.is_a?(Hash)
 
-        return @obj.send(method_name, *args, &block) if val.nil?
+        return @obj.send(meh, *arr, &blk) if val.nil? && @obj.respond_to?(meh)
 
         val
       end

@@ -10,6 +10,8 @@ module Kiwi
           locale: 'en-US',
           active_only: true
         }
+
+        @conn.options[:params_encoder] = Faraday::FlatParamsEncoder
       end
 
       %I[
